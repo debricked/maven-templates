@@ -1,0 +1,26 @@
+stages:
+- build
+- scan
+
+build:
+  stage: build
+  image: maven:3.6.3-jdk-11
+
+  script: 
+  - mvn dependency:tree
+    -DoutputFile=.debricked-maven-dependencies.tgf
+    -DoutputType=tgf
+
+  artifacts:
+    paths:
+    - .debricked-maven-dependencies.tgf
+    expire_in: 1 day
+
+debricked:
+  stage: scan
+  image:
+    name: debricked/debricked-scan
+    entrypoint: ["/gitlab-ci.sh"]
+  script: echo "Done"
+  variables:
+    DEBRICKED_TOKEN: $DEBRICKED_TOKEN
