@@ -1,0 +1,24 @@
+steps:
+  - label: ":maven: mvn dependency:tree"
+    command: mvn dependency:tree -DoutputFile=.debricked-maven-dependencies.tgf -DoutputType=tgf
+    plugins:
+      - docker#v3.3.0:
+          image: maven
+          workdir: /app
+    artifact_paths: "**/.debricked-maven-dependencies.tgf"
+  - wait
+  - label: ":shield: Debricked"
+    command:
+      - buildkite-agent artifact download "**.debricked-maven-dependencies.tgf" .
+      - bash /buildkite.sh
+    plugins:
+      - docker#v3.3.0:
+          image: "debricked/debricked-scan"
+          mount-buildkite-agent: true
+          environment:
+              - "DEBRICKED_TOKEN"
+              - "BUILDKITE_REPO"
+              - "BUILDKITE_COMMIT"
+              - "BUILDKITE_BRANCH"
+          entrypoint: ""
+          shell : ["/bin/sh", "-e", "-c"]
