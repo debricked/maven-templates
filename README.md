@@ -49,3 +49,7 @@ Different CI/CD tools offer different support for this. Below you can find docs 
 ## Travis CI
 - Add Debricked token variable. [Read more](https://debricked.com/docs/integrations/ci-build-systems/travis.html)
 - [See template](.travis.yml)
+
+## Bitbucket
+- Add Debricked token variable. [Read more](https://debricked.com/docs/integrations/ci-build-systems/bitbucket.html)
+- [See template](bitbucket-pipelines.yml)

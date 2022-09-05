@@ -1,0 +1,16 @@
+pipelines:
+  default:
+      - step:
+          name: "Generate dependencies file"
+          image: maven:3-jdk-11
+          script:
+            - mvn dependency:tree -DoutputFile=.debricked-maven-dependencies.tgf -DoutputType=tgf
+          artifacts:
+            - '**.debricked-maven-dependencies.tgf'
+      - step:
+          name: Debricked-scan
+          script:
+            - pipe: debricked/debricked-scan:1.4.1
+              variables: 
+               DEBRICKED_TOKEN: $DEBRICKED_TOKEN
+               # For all options, please check https://bitbucket.org/debricked/debricked-scan
